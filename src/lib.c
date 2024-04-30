@@ -2,9 +2,8 @@
 #include "alloc.h"
 #include <string.h>
 
-#define needs_to_grow(ptr,additional) self->capacity-self->len < additional
+#define needs_to_grow(ptr,additional) self->capacity-self->len<additional
 
-typedef Vec* Self;
 
 
 Vec new_vec(usize BYTES_PER_ELEMENT) {
@@ -28,9 +27,15 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT) {
  * * `element` is moved afterwords.
  * * It's the user's responsiblity to free `element`.
  */
-void vec_push(void* self,void* element) {
+void vec_push(Self self,void* element) {
   not_null2(self,element);
+  usize capacity=self->capacity;
+  if(capacity==self->len) {
+    vec_reserve(self,capacity);
+  }
 
+  usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  memmove(self->ptr+(self->len++*BYTES_PER_ELEMENT),element,BYTES_PER_ELEMENT);
 }
 
 void vec_reserve(Self self,usize additional) {
