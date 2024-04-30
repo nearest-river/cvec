@@ -1,15 +1,8 @@
+#ifndef VEC_PRELUDE_H
+#define VEC_PRELUDE_H
+
 #include <stdio.h>
 #include <stdlib.h>
+#include "lib.h"
 
-#define NULL ((void*)0)
-
-
-typedef __SIZE_TYPE__ usize;
-
-typedef struct Vec {
-  void* ptr;
-  usize BYTES_PER_ELEMENT;
-  usize len;
-  usize capacity;
-} Vec;
-
+#endif
