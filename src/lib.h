@@ -18,5 +18,6 @@ typedef struct Vec {
 
 Vec new_vec(usize BYTES_PER_ELEMENT);
 Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT);
+void vec_reserve(Self self,usize additional);
 
 #endif
