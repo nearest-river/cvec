@@ -18,8 +18,8 @@ void _vec_grow_amortized(Vec* self,usize additional) {
   usize required_cap=self->len+additional;
   usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
 
-  usize cap=max(self->capacity*2,required_cap);
-  usize cap=max(cap,MIN_NON_ZERO_CAP(BYTES_PER_ELEMENT));
+  usize cap0=max(self->capacity*2,required_cap);
+  usize cap=max(cap0,MIN_NON_ZERO_CAP(BYTES_PER_ELEMENT));
   usize layout_size=cap*BYTES_PER_ELEMENT;
 
   void* prev_ptr=self->ptr;
