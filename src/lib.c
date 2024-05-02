@@ -35,7 +35,7 @@ void vec_push(Self self,void* element) {
   }
 
   usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
-  memmove(self->ptr+(self->len++*BYTES_PER_ELEMENT),element,BYTES_PER_ELEMENT);
+  memmove(&self->ptr[self->len++*BYTES_PER_ELEMENT],element,BYTES_PER_ELEMENT);
 }
 
 void vec_reserve(Self self,usize additional) {
