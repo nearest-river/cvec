@@ -8,6 +8,9 @@ int main(int argc,const char** argv) {
     vec_push(&vec,&i);
   }
 
+  // int* popped=vec_pop(&vec);
+  // printf("popped: %d\n",*popped);
+
   int* arr=vec.ptr;
   for(int i=0;i<vec.len;i++) {
     printf("%d\n",arr[i]);
