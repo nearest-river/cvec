@@ -53,7 +53,7 @@ void vec_reserve_exact(Self self,usize additional) {
 
   if(new_ptr==prev_ptr) return;
 
-  free(prev_ptr);
+  free(self->ptr);
   self->ptr=new_ptr;
 }
 

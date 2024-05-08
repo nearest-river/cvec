@@ -30,8 +30,8 @@ void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
 
   if(new_ptr==prev_ptr) return;
 
+  free(self->ptr);
   self->ptr=new_ptr;
-  free(prev_ptr);
 }
 
 
