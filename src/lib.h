@@ -80,6 +80,16 @@ void vec_reserve_exact(Self self,usize additional);
  */
 void vec_append(Self self,Vec* other);
 
+/**
+ * Clones and appends all elements in `data` to the `Vec`.
+ * 
+ * Iterates over the `data`, clones each element, and then appends it to this `Vec`.
+ * The `data` is traversed in-order.
+ */
+void vec_extend(Self self,void* data,usize len);
+
+
+
 #ifdef _cplusplus
 }
 #endif

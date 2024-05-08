@@ -64,7 +64,6 @@ void* vec_pop(Self self) {
   return element;
 }
 
-
 void vec_append(Self self,Vec* other) {
   not_null2(self,other);
 
@@ -77,5 +76,17 @@ void vec_append(Self self,Vec* other) {
   self->len+=other->len;
   other->len=0;
 }
+
+void vec_extend(Self self,void* data,usize len) {
+  not_null2(self,data);
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+
+  vec_reserve(self,len);
+  memcpy(self->ptr+(BYTES_PER_ELEMENT*self->len),data,len*BYTES_PER_ELEMENT);
+
+  self->len+=len;
+}
+
+
 
 

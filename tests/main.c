@@ -10,7 +10,7 @@ int main(int argc,const char** argv) {
     vec_push(&vec1,&i);
   }
 
-  vec_append(&vec,&vec1);
+  vec_extend(&vec,vec1.ptr,vec1.len);
 
 
   // int* popped=vec_pop(&vec);
