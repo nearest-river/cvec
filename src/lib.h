@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#define MAX_CAPACITY 0x7fffffffUL
+
 typedef __SIZE_TYPE__ usize;
 
 /**
@@ -51,7 +53,7 @@ void* vec_pop(Self self);
  * Does nothing if capacity is already sufficient.
  * 
  * ## Panics
- * Panics if the new capacity exceeds 0x7fffffff bytes.
+ * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
 void vec_reserve(Self self,usize additional);
 
@@ -66,9 +68,17 @@ void vec_reserve(Self self,usize additional);
  * Prefer `vec_reserve` if future insertions are expected.
  * 
  * ## Panics
- * Panics if the new capacity exceeds 0x7fffffff.
+ * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
 void vec_reserve_exact(Self self,usize additional);
+
+/**
+ * Moves all the elements of other into `self`, leaving `other` empty.
+ * 
+ * ## Panics
+ * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
+ */
+void vec_append(Self self,Vec* other);
 
 #ifdef _cplusplus
 }

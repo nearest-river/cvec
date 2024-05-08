@@ -10,7 +10,8 @@ int main(int argc,const char** argv) {
     vec_push(&vec1,&i);
   }
 
-  vec_reserve(&vec,10);
+  vec_append(&vec,&vec1);
+
 
   // int* popped=vec_pop(&vec);
   // printf("popped: %d\n",*popped);
@@ -20,7 +21,6 @@ int main(int argc,const char** argv) {
     printf("%d, ",arr[i]);
   }
   printf("\n");
-
 
   return 0;
 }

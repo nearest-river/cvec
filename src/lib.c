@@ -39,8 +39,6 @@ void vec_reserve(Self self,usize additional) {
   }
 }
 
-
-
 void vec_reserve_exact(Self self,usize additional) {
   not_null(self);
   usize capacity=self->capacity;
@@ -57,8 +55,6 @@ void vec_reserve_exact(Self self,usize additional) {
   self->ptr=new_ptr;
 }
 
-
-
 void* vec_pop(Self self) {
   not_null(self);
   const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
@@ -69,6 +65,17 @@ void* vec_pop(Self self) {
 }
 
 
+void vec_append(Self self,Vec* other) {
+  not_null2(self,other);
 
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  assert(BYTES_PER_ELEMENT==other->BYTES_PER_ELEMENT);
+
+  vec_reserve(self,other->len);
+  memmove(self->ptr+(BYTES_PER_ELEMENT*self->len),other->ptr,BYTES_PER_ELEMENT*other->len);
+
+  self->len+=other->len;
+  other->len=0;
+}
 
 
