@@ -18,12 +18,6 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT) {
   return self;
 }
 
-/**
- * Pushes an element to the back of the `Vec`.
- * 
- * * `element` is moved afterwords.
- * * It's the user's responsiblity to free `element`.
- */
 void vec_push(Self self,void* element) {
   not_null2(self,element);
   usize capacity=self->capacity;

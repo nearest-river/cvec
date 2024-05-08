@@ -35,15 +35,3 @@ void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
 }
 
 
-
-void vec_reserve_exact(Self self,usize additional) {
-  not_null(self);
-  if(self->capacity-self->len >= additional) return;
-
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
-  
-
-
-
-
-}
