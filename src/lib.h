@@ -88,6 +88,11 @@ void vec_append(Self self,Vec* other);
  */
 void vec_extend(Self self,void* data,usize len);
 
+/**
+ * Clears the vector, removing all values.
+ * * Note that this method has no effect on the allocated memory or capacity of the vector.
+ */
+void vec_clear(Self self);
 
 
 #ifdef _cplusplus

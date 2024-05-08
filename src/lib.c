@@ -87,6 +87,9 @@ void vec_extend(Self self,void* data,usize len) {
   self->len+=len;
 }
 
-
+void vec_clear(Self self) {
+  not_null(self);
+  self->len=0;
+}
 
 
