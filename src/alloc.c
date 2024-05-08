@@ -14,13 +14,12 @@ void* alloc(usize size) {
   return ptr;
 }
 
-void _vec_grow_amortized(Vec* self,usize additional) {
-  usize len=self->len;
+void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
   const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
   const usize MIN_NON_ZERO_CAPACITY=MIN_NON_ZERO_CAP(BYTES_PER_ELEMENT);
 
   usize required_cap=len+additional;
-  usize cap0=max(self->capacity*2,required_cap);
+  usize cap0=max(capacity*2,required_cap);
   usize cap=max(cap0,MIN_NON_ZERO_CAPACITY);
 
   void* prev_ptr=self->ptr;
@@ -37,3 +36,14 @@ void _vec_grow_amortized(Vec* self,usize additional) {
 
 
 
+void vec_reserve_exact(Self self,usize additional) {
+  not_null(self);
+  if(self->capacity-self->len >= additional) return;
+
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  
+
+
+
+
+}

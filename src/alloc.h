@@ -10,7 +10,7 @@ extern "C" {
 #define DEFAULT_SIZE 16
 
 void* alloc(usize size);
-void _vec_grow_amortized(Vec* self,usize additional);
+void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional);
 
 
 #ifdef _cplusplus

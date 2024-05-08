@@ -32,24 +32,29 @@ void vec_push(Self self,void* element) {
     vec_reserve(self,capacity);
   }
 
-  usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
   memmove(self->ptr+(BYTES_PER_ELEMENT*self->len++),element,BYTES_PER_ELEMENT);
 }
 
 void vec_reserve(Self self,usize additional) {
   not_null(self);
-  if(self->capacity-self->len < additional) {
-    _vec_grow_amortized(self,additional);
+  usize capacity=self->capacity;
+  usize len=self->len;
+  if(capacity-len < additional) {
+    _vec_grow_amortized(self,capacity,len,additional);
   }
 }
 
-
 void* vec_pop(Self self) {
   not_null(self);
-  usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
   void* element=alloc(BYTES_PER_ELEMENT);
 
   memmove(element,self->ptr+(--self->len*BYTES_PER_ELEMENT),BYTES_PER_ELEMENT);
   return element;
 }
+
+
+
+
 
