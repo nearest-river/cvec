@@ -27,6 +27,7 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT) {
 void vec_push(Self self,void* element) {
   not_null2(self,element);
   usize capacity=self->capacity;
+
   if(capacity==self->len) {
     vec_reserve(self,capacity);
   }
@@ -37,7 +38,7 @@ void vec_push(Self self,void* element) {
 
 void vec_reserve(Self self,usize additional) {
   not_null(self);
-  if(self->capacity-self->len<additional) {
+  if(self->capacity-self->len < additional) {
     _vec_grow_amortized(self,additional);
   }
 }

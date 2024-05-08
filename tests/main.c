@@ -8,13 +8,16 @@ int main(int argc,const char** argv) {
     vec_push(&vec,&i);
   }
 
+  vec_reserve(&vec,10);
+
   // int* popped=vec_pop(&vec);
   // printf("popped: %d\n",*popped);
 
   int* arr=vec.ptr;
   for(int i=0;i<vec.len;i++) {
-    printf("%d\n",arr[i]);
+    printf("%d, ",arr[i]);
   }
+  printf("\n");
 
 
   return 0;
