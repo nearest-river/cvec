@@ -45,6 +45,26 @@ void vec_reserve(Self self,usize additional) {
   }
 }
 
+
+
+void vec_reserve_exact(Self self,usize additional) {
+  not_null(self);
+  usize capacity=self->capacity;
+  if(capacity-self->len >= additional) return;
+
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+
+  void* prev_ptr=self->ptr;
+  void* new_ptr=realloc(prev_ptr,(additional+capacity)*BYTES_PER_ELEMENT);
+
+  if(new_ptr==prev_ptr) return;
+
+  free(prev_ptr);
+  self->ptr=new_ptr;
+}
+
+
+
 void* vec_pop(Self self) {
   not_null(self);
   const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
