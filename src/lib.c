@@ -92,4 +92,24 @@ void vec_clear(Self self) {
   self->len=0;
 }
 
+void vec_insert(Self self,usize index,void* element) {
+  usize len=self->len++;
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+
+  if(len==self->capacity) vec_reserve(self,1);
+  void* dest=self->ptr+(index*BYTES_PER_ELEMENT);
+
+  if(index<len) {
+    // Shift everything over to make space.
+    memmove(dest+BYTES_PER_ELEMENT,dest,BYTES_PER_ELEMENT*(len-index));
+  } else if(index>len) {
+    panic("insertion index (is %ld) should be <= len (is %ld)",index,len);
+  }
+  // index==len needs no elements to be shifted.
+
+  memmove(dest,element,BYTES_PER_ELEMENT);
+}
+
+
+
 

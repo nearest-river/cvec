@@ -13,8 +13,11 @@ int main(int argc,const char** argv) {
   vec_extend(&vec,vec1.ptr,vec1.len);
 
 
-  // int* popped=vec_pop(&vec);
-  // printf("popped: %d\n",*popped);
+  int* popped=vec_pop(&vec);
+  printf("popped: %d\n",*popped);
+
+  int xd=69;
+  vec_insert(&vec,0,&xd);
 
   int* arr=vec.ptr;
   for(int i=0;i<vec.len;i++) {

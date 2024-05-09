@@ -94,6 +94,15 @@ void vec_extend(Self self,void* data,usize len);
  */
 void vec_clear(Self self);
 
+/**
+ * Inserts an `element` at position `index` within the vector, shifting all elements after it to the right.
+ * 
+ * ## Panics
+ * Panics if `index > len`.
+ */
+void vec_insert(Self self,usize index,void* element);
+
+
 
 #ifdef _cplusplus
 }
