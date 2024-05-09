@@ -115,6 +115,16 @@ void vec_insert(Self self,usize index,void* element);
  */
 void* vec_remove(Self self,usize index);
 
+/**
+ * Shortens the vector, keeping the first `len` elements and dropping the rest.
+ * 
+ * If `len` is greater or equal to the vector's current length, this has no effect.
+ * 
+ * The `vec_drain` method can emulate truncate, but causes the excess elements to be returned instead of dropped.
+ * 
+ * * Note that this method has no effect on the allocated capacity of the vector.
+ */
+void vec_truncate(Self self,usize len,void (*destructor)(void*));
 
 
 #ifdef _cplusplus

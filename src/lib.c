@@ -130,5 +130,20 @@ void* vec_remove(Self self,usize index) {
   return ret;
 }
 
+void vec_truncate(Self self,usize len,void (*destructor)(void*)) {
+  not_null(self);
+  Vec this=*self;
+  usize len=self->len;
+
+  if(len>this.len) return;
+  self->len=len;
+
+  if(!destructor) return;
+  usize remaining_len=this.len-len;
+  _drop_in_place(this.ptr,remaining_len,this.BYTES_PER_ELEMENT,destructor);
+}
+
+
+
 
 
