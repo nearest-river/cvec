@@ -87,8 +87,13 @@ void vec_extend(Self self,void* data,usize len) {
   self->len+=len;
 }
 
-void vec_clear(Self self) {
+void vec_clear(Self self,void (*destructor)(void*)) {
   not_null(self);
+  Vec this=*self;
+  if(destructor!=NULL) {
+    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,destructor);
+  }
+
   self->len=0;
 }
 

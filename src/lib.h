@@ -91,8 +91,9 @@ void vec_extend(Self self,void* data,usize len);
 /**
  * Clears the vector, removing all values.
  * * Note that this method has no effect on the allocated memory or capacity of the vector.
+ * * The destructor can simply be `NULL` if `T` doesn't hold any resource.
  */
-void vec_clear(Self self);
+void vec_clear(Self self,void (*destructor)(void*));
 
 /**
  * Inserts an `element` at position `index` within the vector, shifting all elements after it to the right.
