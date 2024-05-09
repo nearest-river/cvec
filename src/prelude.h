@@ -13,7 +13,7 @@
 #define not_null2(ptr1,ptr2) assert(ptr1!=NULL);assert(ptr2!=NULL)
 #define panic(...) { printf(__VA_ARGS__);exit(1); }
 
-#define bool unsigned char;
+#define bool unsigned char
 #define true 1
 #define false 0
 
