@@ -143,6 +143,26 @@ void vec_truncate(Self self,usize len,void (*destructor)(void*)) {
   _drop_in_place(this.ptr,remaining_len,this.BYTES_PER_ELEMENT,destructor);
 }
 
+void vec_resize(Self self,usize new_len,void* value,void (*destructor)(void*)) {
+  not_null(self);
+  Vec this=*self;
+
+  if(new_len<=this.len) {
+    vec_truncate(self,new_len,destructor);
+    return;
+  }
+
+  usize required_len=new_len-this.len;
+  vec_reserve(self,required_len);
+
+  void* ptr=this.ptr+(this.len*this.BYTES_PER_ELEMENT);
+  for(usize i=0;i<required_len;i++) {
+    memmove(value,ptr,this.BYTES_PER_ELEMENT);
+    ptr+=this.BYTES_PER_ELEMENT;
+  }
+
+  self->len=new_len;
+}
 
 
 

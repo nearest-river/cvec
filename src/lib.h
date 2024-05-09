@@ -126,6 +126,21 @@ void* vec_remove(Self self,usize index);
  */
 void vec_truncate(Self self,usize len,void (*destructor)(void*));
 
+/**
+ * Resizes the `Vec` in-place so that `len` is equal to `new_len`.
+ * 
+ * If `new_len` is greater than `len`, the `Vec` is extended by the difference,
+ * with each additional slot filled with value.
+ * If `new_len` is less than `len`, the `Vec` is simply truncated.
+ * 
+ * This method shallow-copies `value` byte-by-byte.
+ * If you need more flexibility use `vec_resize_with`.
+ * If you only need to resize to a smaller size, use `vec_truncate`.
+ * 
+ * * Note that freeing `value` is the user's responsiblity.
+ */
+void vec_resize(Self self,usize new_len,void* value,void (*destructor)(void*));
+
 
 #ifdef _cplusplus
 }
