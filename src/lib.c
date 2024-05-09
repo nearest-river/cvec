@@ -110,6 +110,20 @@ void vec_insert(Self self,usize index,void* element) {
   memmove(dest,element,BYTES_PER_ELEMENT);
 }
 
+void* vec_remove(Self self,usize index) {
+  not_null(self);
+  usize len=self->len--;
+  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+
+  if(index>=len) panic("removal index (is %ld) should be < len (is %ld)",index,len);
+  void* ptr=self->ptr+(index*BYTES_PER_ELEMENT);
+  void* ret=malloc(BYTES_PER_ELEMENT);
+
+  memmove(ret,ptr,BYTES_PER_ELEMENT);
+  memmove(ptr,ptr+BYTES_PER_ELEMENT,BYTES_PER_ELEMENT*(len-index-1));// Shifting
+
+  return ret;
+}
 
 
 

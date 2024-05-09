@@ -102,6 +102,18 @@ void vec_clear(Self self);
  */
 void vec_insert(Self self,usize index,void* element);
 
+/**
+ * Removes and returns the element at position `index` within the vector, shifting all elements after it to the left.
+ * 
+ * * Note: Because this shifts over the remaining elements, it has a worst-case performance of `O(n)`.
+ * If you don't need the order of elements to be preserved, use `vec_swap_remove` instead.
+ * * It's the users responsiblity to free `element`.
+ * 
+ * ## Panics
+ * Panics if index is out of bounds.
+ */
+void* vec_remove(Self self,usize index);
+
 
 
 #ifdef _cplusplus
