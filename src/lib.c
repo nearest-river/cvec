@@ -19,6 +19,16 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,void (*destruct
   return self;
 }
 
+void drop_vec(Self self) {
+  Vec this=*self;
+
+  if(this.destructor) {
+    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
+  }
+  free(self->ptr);
+}
+
+
 void vec_push(Self self,void* element) {
   not_null2(self,element);
   Vec this=*self;

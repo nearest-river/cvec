@@ -32,6 +32,13 @@ Vec new_vec(usize BYTES_PER_ELEMENT,void (*destructor)(void*));
 Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,void (*destructor)(void*));
 
 /**
+ * Drops the `Vec` freeing all the resources held by the vector and its elements.
+ * 
+ * * Note its the user's responsiblity to free the `self` pointer. (only if it's heap allocated)
+ */
+void drop_vec(Self self);
+
+/**
  * Pushes an element to the back of the `Vec`.
  * 
  * * `element` is moved afterwords.
