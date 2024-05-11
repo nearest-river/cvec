@@ -170,6 +170,26 @@ void vec_resize(Self self,usize new_len,void* value) {
   self->len=new_len;
 }
 
+void vec_resize_with(Self self,usize new_len,void* (*f)(void)) {
+  not_null2(self,f);
+  Vec this=*self;
 
+  if(new_len<=this.len) {
+    vec_truncate(self,new_len);
+    return;
+  }
+
+  usize required_len=new_len-this.len;
+  vec_reserve(self,required_len);
+
+  void* ptr=this.ptr+(this.len*this.BYTES_PER_ELEMENT);
+  for(usize i=0;i<required_len;i++) {
+    void* value=f();
+
+    memmove(ptr,value,this.BYTES_PER_ELEMENT);
+    free(value);
+    ptr+=this.BYTES_PER_ELEMENT;
+  }
+}
 
 

@@ -152,6 +152,21 @@ void vec_truncate(Self self,usize len);
  */
 void vec_resize(Self self,usize new_len,void* value);
 
+/**
+ * Resizes the `Vec` in-place so that `len` is equal to `new_len`.
+ * 
+ * If `new_len` is greater than `len`, the `Vec` is extended by the difference,
+ * with each additional slot filled with the result of calling the function `f`.
+ * The return values from `f` will end up in the `Vec` in the order they have been generated.
+ * 
+ * If `new_len` is less than `len`, the `Vec` is simply truncated.
+ * 
+ * This method uses a function to create new values on every push.
+ * If you'd rather `Clone` a given value, use `vec_resize`.
+ * If you want to use the default values trait to generate values, you can pass `default` as the second argument.
+ */
+void vec_resize_with(Self self,usize new_len,void* (*f)(void));
+
 
 #ifdef _cplusplus
 }
