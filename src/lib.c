@@ -57,7 +57,6 @@ void vec_reserve_exact(Self self,usize additional) {
   void* new_ptr=realloc(this.ptr,(additional+this.capacity)*this.BYTES_PER_ELEMENT);
   if(new_ptr==this.ptr) return;
 
-  free(this.ptr);
   self->ptr=new_ptr;
 }
 
