@@ -163,7 +163,7 @@ void vec_resize(Self self,usize new_len,void* value) {
 
   void* ptr=this.ptr+(this.len*this.BYTES_PER_ELEMENT);
   for(usize i=0;i<required_len;i++) {
-    memmove(value,ptr,this.BYTES_PER_ELEMENT);
+    memmove(ptr,value,this.BYTES_PER_ELEMENT);
     ptr+=this.BYTES_PER_ELEMENT;
   }
 
