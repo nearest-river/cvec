@@ -9,8 +9,8 @@
 #define max(x,y) x>y?x:y
 #define MIN_NON_ZERO_CAP(BYTES_PER_ELEMENT) BYTES_PER_ELEMENT==1?8:BYTES_PER_ELEMENT<=1024?4:1
 
-#define not_null(ptr) assert(ptr!=NULL)
-#define not_null2(ptr1,ptr2) assert(ptr1!=NULL);assert(ptr2!=NULL)
+#define not_null(ptr) assert(ptr)
+#define not_null2(ptr1,ptr2) assert(ptr1);assert(ptr2)
 #define panic(...) { printf(__VA_ARGS__);exit(1); }
 
 #define bool unsigned char

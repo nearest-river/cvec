@@ -20,69 +20,65 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT) {
 
 void vec_push(Self self,void* element) {
   not_null2(self,element);
-  usize capacity=self->capacity;
+  Vec this=*self;
 
-  if(capacity==self->len) {
-    vec_reserve(self,capacity);
+  if(this.capacity==this.len) {
+    vec_reserve(self,this.capacity);
   }
 
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
-  memmove(self->ptr+(BYTES_PER_ELEMENT*self->len++),element,BYTES_PER_ELEMENT);
+  memmove(this.ptr+(this.BYTES_PER_ELEMENT*self->len++),element,this.BYTES_PER_ELEMENT);
 }
 
 void vec_reserve(Self self,usize additional) {
   not_null(self);
-  usize capacity=self->capacity;
-  usize len=self->len;
-  if(capacity-len < additional) {
-    _vec_grow_amortized(self,capacity,len,additional);
+  Vec this=*self;
+
+  if(this.capacity-this.len < additional) {
+    _vec_grow_amortized(self,this.capacity,this.len,additional);
   }
 }
 
 void vec_reserve_exact(Self self,usize additional) {
   not_null(self);
-  usize capacity=self->capacity;
-  if(capacity-self->len >= additional) return;
+  Vec this=*self;
+  if(this.capacity-this.len >= additional) return;
 
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  void* new_ptr=realloc(this.ptr,(additional+this.capacity)*this.BYTES_PER_ELEMENT);
+  if(new_ptr==this.ptr) return;
 
-  void* prev_ptr=self->ptr;
-  void* new_ptr=realloc(prev_ptr,(additional+capacity)*BYTES_PER_ELEMENT);
-
-  if(new_ptr==prev_ptr) return;
-
-  free(self->ptr);
+  free(this.ptr);
   self->ptr=new_ptr;
 }
 
 void* vec_pop(Self self) {
   not_null(self);
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
-  void* element=alloc(BYTES_PER_ELEMENT);
+  Vec this=*self;
+  void* element=alloc(this.BYTES_PER_ELEMENT);
 
-  memmove(element,self->ptr+(--self->len*BYTES_PER_ELEMENT),BYTES_PER_ELEMENT);
+  memmove(element,this.ptr+(--self->len*this.BYTES_PER_ELEMENT),this.BYTES_PER_ELEMENT);
   return element;
 }
 
 void vec_append(Self self,Vec* other) {
   not_null2(self,other);
+  Vec this=*self;
+  Vec other_vec=*other;
 
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
-  assert(BYTES_PER_ELEMENT==other->BYTES_PER_ELEMENT);
+  assert(this.BYTES_PER_ELEMENT==other_vec.BYTES_PER_ELEMENT);
 
-  vec_reserve(self,other->len);
-  memmove(self->ptr+(BYTES_PER_ELEMENT*self->len),other->ptr,BYTES_PER_ELEMENT*other->len);
+  vec_reserve(self,other_vec.len);
+  memmove(this.ptr+(this.BYTES_PER_ELEMENT*this.len),other_vec.ptr,this.BYTES_PER_ELEMENT*other_vec.len);
 
-  self->len+=other->len;
+  self->len+=other_vec.len;
   other->len=0;
 }
 
 void vec_extend(Self self,void* data,usize len) {
   not_null2(self,data);
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  Vec this=*self;
 
   vec_reserve(self,len);
-  memcpy(self->ptr+(BYTES_PER_ELEMENT*self->len),data,len*BYTES_PER_ELEMENT);
+  memcpy(self->ptr+(this.BYTES_PER_ELEMENT*this.len),data,this.BYTES_PER_ELEMENT*len);
 
   self->len+=len;
 }
@@ -90,7 +86,7 @@ void vec_extend(Self self,void* data,usize len) {
 void vec_clear(Self self,void (*destructor)(void*)) {
   not_null(self);
   Vec this=*self;
-  if(destructor!=NULL) {
+  if(destructor) {
     _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,destructor);
   }
 
@@ -99,33 +95,33 @@ void vec_clear(Self self,void (*destructor)(void*)) {
 
 void vec_insert(Self self,usize index,void* element) {
   usize len=self->len++;
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  Vec this=*self;
 
-  if(len==self->capacity) vec_reserve(self,1);
-  void* dest=self->ptr+(index*BYTES_PER_ELEMENT);
+  if(len==this.capacity) vec_reserve(self,1);
+  void* dest=this.ptr+(index*this.BYTES_PER_ELEMENT);
 
   if(index<len) {
     // Shift everything over to make space.
-    memmove(dest+BYTES_PER_ELEMENT,dest,BYTES_PER_ELEMENT*(len-index));
+    memmove(dest+this.BYTES_PER_ELEMENT,dest,this.BYTES_PER_ELEMENT*(len-index));
   } else if(index>len) {
     panic("insertion index (is %ld) should be <= len (is %ld)",index,len);
   }
   // index==len needs no elements to be shifted.
 
-  memmove(dest,element,BYTES_PER_ELEMENT);
+  memmove(dest,element,this.BYTES_PER_ELEMENT);
 }
 
 void* vec_remove(Self self,usize index) {
   not_null(self);
-  usize len=self->len--;
-  const usize BYTES_PER_ELEMENT=self->BYTES_PER_ELEMENT;
+  Vec this=*self;
 
-  if(index>=len) panic("removal index (is %ld) should be < len (is %ld)",index,len);
-  void* ptr=self->ptr+(index*BYTES_PER_ELEMENT);
-  void* ret=malloc(BYTES_PER_ELEMENT);
+  if(index>=this.len) panic("removal index (is %ld) should be < len (is %ld)",index,this.len);
+  void* ptr=this.ptr+(index*this.BYTES_PER_ELEMENT);
+  void* ret=malloc(this.BYTES_PER_ELEMENT);
 
-  memmove(ret,ptr,BYTES_PER_ELEMENT);
-  memmove(ptr,ptr+BYTES_PER_ELEMENT,BYTES_PER_ELEMENT*(len-index-1));// Shifting
+  memmove(ret,ptr,this.BYTES_PER_ELEMENT);
+  memmove(ptr,ptr+this.BYTES_PER_ELEMENT,this.BYTES_PER_ELEMENT*(this.len-index-1));// Shifting
+  self->len--;
 
   return ret;
 }
@@ -138,8 +134,8 @@ void vec_truncate(Self self,usize len,void (*destructor)(void*)) {
   self->len=len;
 
   if(!destructor) return;
-  usize remaining_len=this.len-len;
-  _drop_in_place(this.ptr,remaining_len,this.BYTES_PER_ELEMENT,destructor);
+  usize count=this.len-len;// old_len-new_len
+  _drop_in_place(this.ptr,count,this.BYTES_PER_ELEMENT,destructor);
 }
 
 void vec_resize(Self self,usize new_len,void* value,void (*destructor)(void*)) {
