@@ -42,7 +42,7 @@ void drop_vec(Self self);
  * Pushes an element to the back of the `Vec`.
  * 
  * * `element` is moved afterwords.
- * * It's the user's responsiblity to free `element`.
+ * * It's the user's responsiblity to free `element`. (only if it's heap allocated)
  */
 void vec_push(Self self,void* element);
 
@@ -50,7 +50,7 @@ void vec_push(Self self,void* element);
  * Pops the last element of the `Vec`
  * 
  * * The element is moved afterwords.
- * * It's the user's responsiblity to free `element`.
+ * * It's the user's responsiblity to drop `element`.
  */
 void* vec_pop(Self self);
 
@@ -116,7 +116,7 @@ void vec_insert(Self self,usize index,void* element);
  * 
  * * Note: Because this shifts over the remaining elements, it has a worst-case performance of `O(n)`.
  * If you don't need the order of elements to be preserved, use `vec_swap_remove` instead.
- * * It's the users responsiblity to free `element`.
+ * * It's the users responsiblity to drop `element`.
  * 
  * ## Panics
  * Panics if index is out of bounds.
@@ -146,6 +146,9 @@ void vec_truncate(Self self,usize len);
  * If you only need to resize to a smaller size, use `vec_truncate`.
  * 
  * * Note that freeing `value` is the user's responsiblity.
+ * 
+ * ## Safety
+ * * Note that if `value` holds any resources, it may be freed more than once so be careful or prefer using `vec_resize_with`.
  */
 void vec_resize(Self self,usize new_len,void* value);
 
