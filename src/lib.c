@@ -3,17 +3,18 @@
 #include <string.h>
 
 
-Vec new_vec(usize BYTES_PER_ELEMENT) {
-  return new_vec_with_capacity(DEFAULT_SIZE,BYTES_PER_ELEMENT);
+Vec new_vec(usize BYTES_PER_ELEMENT,void (*destructor)(void*)) {
+  return new_vec_with_capacity(DEFAULT_SIZE,BYTES_PER_ELEMENT,destructor);
 }
 
-Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT) {
+Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,void (*destructor)(void*)) {
   Vec self;
 
   self.BYTES_PER_ELEMENT=BYTES_PER_ELEMENT;
   self.capacity=capacity;
   self.len=0;
   self.ptr=alloc(capacity*BYTES_PER_ELEMENT);
+  self.destructor=destructor;
 
   return self;
 }
@@ -83,11 +84,11 @@ void vec_extend(Self self,void* data,usize len) {
   self->len+=len;
 }
 
-void vec_clear(Self self,void (*destructor)(void*)) {
+void vec_clear(Self self) {
   not_null(self);
   Vec this=*self;
-  if(destructor) {
-    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,destructor);
+  if(this.destructor) {
+    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
   }
 
   self->len=0;
@@ -126,24 +127,24 @@ void* vec_remove(Self self,usize index) {
   return ret;
 }
 
-void vec_truncate(Self self,usize len,void (*destructor)(void*)) {
+void vec_truncate(Self self,usize len) {
   not_null(self);
   Vec this=*self;
 
   if(len>this.len) return;
   self->len=len;
 
-  if(!destructor) return;
+  if(!this.destructor) return;
   usize count=this.len-len;// old_len-new_len
-  _drop_in_place(this.ptr,count,this.BYTES_PER_ELEMENT,destructor);
+  _drop_in_place(this.ptr,count,this.BYTES_PER_ELEMENT,this.destructor);
 }
 
-void vec_resize(Self self,usize new_len,void* value,void (*destructor)(void*)) {
+void vec_resize(Self self,usize new_len,void* value) {
   not_null(self);
   Vec this=*self;
 
   if(new_len<=this.len) {
-    vec_truncate(self,new_len,destructor);
+    vec_truncate(self,new_len);
     return;
   }
 

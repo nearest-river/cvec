@@ -17,6 +17,7 @@ typedef struct Vec {
   usize len;
   usize capacity;
   void* ptr;
+  void (*destructor)(void*);
 } Vec;
 typedef Vec* Self;
 
@@ -24,11 +25,11 @@ typedef Vec* Self;
 /**
  * Constructs a new empty `Vec` with a capacity.
  */
-Vec new_vec(usize BYTES_PER_ELEMENT);
+Vec new_vec(usize BYTES_PER_ELEMENT,void (*destructor)(void*));
 /**
  * Construcs a new `Vec` with the specefied capacity.
  */
-Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT);
+Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,void (*destructor)(void*));
 
 /**
  * Pushes an element to the back of the `Vec`.
@@ -93,7 +94,7 @@ void vec_extend(Self self,void* data,usize len);
  * * Note that this method has no effect on the allocated memory or capacity of the vector.
  * * The destructor can simply be `NULL` if `T` doesn't hold any resource.
  */
-void vec_clear(Self self,void (*destructor)(void*));
+void vec_clear(Self self);
 
 /**
  * Inserts an `element` at position `index` within the vector, shifting all elements after it to the right.
@@ -124,7 +125,7 @@ void* vec_remove(Self self,usize index);
  * 
  * * Note that this method has no effect on the allocated capacity of the vector.
  */
-void vec_truncate(Self self,usize len,void (*destructor)(void*));
+void vec_truncate(Self self,usize len);
 
 /**
  * Resizes the `Vec` in-place so that `len` is equal to `new_len`.
@@ -139,7 +140,7 @@ void vec_truncate(Self self,usize len,void (*destructor)(void*));
  * 
  * * Note that freeing `value` is the user's responsiblity.
  */
-void vec_resize(Self self,usize new_len,void* value,void (*destructor)(void*));
+void vec_resize(Self self,usize new_len,void* value);
 
 
 #ifdef _cplusplus
