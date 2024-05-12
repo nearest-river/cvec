@@ -1,0 +1,16 @@
+#!/bin/sh
+
+ensure_dir() {
+  if [ ! -d $1 ]; then
+    mkdir $1
+  fi
+}
+
+ensure_dir "include";
+ensure_dir "bin";
+
+cd include;
+gcc -Wall -g -c ../src/*.c;
+ar -rc "./lib$1.a" *.o
+rm -f *.o
+
