@@ -1,31 +1,26 @@
 #include <stdio.h>
 #include "../src/lib.h"
+#include <stdlib.h>
 
 void print_vec(Vec* vec);
-
+void fill_vec(Vec* vec);
 
 int main(int argc,const char** argv) {
-  Vec vec=new_vec(sizeof(int),NULL);
-  Vec vec1=new_vec(sizeof(int),NULL);
+  Vec vec=new_vec(sizeof(Vec),(void (*)(void*))drop_vec);
 
   for(int i=0;i<32;i++) {
-    vec_push(&vec,&i);
-    vec_push(&vec1,&i);
+    Vec inner_vec=new_vec(sizeof(int),NULL);
+
+    fill_vec(&inner_vec);
+    vec_push(&vec,&inner_vec);
   }
 
-  vec_extend(&vec,vec1.ptr,vec1.len);
+  Vec* arr=vec.ptr;
+  for(usize i=0;i<vec.len;i++) {
+    print_vec(arr++);
+  }
 
-
-  int* popped=vec_pop(&vec);
-  printf("popped: %d\n",*popped);
-
-  int xd=69;
-  vec_insert(&vec,0,&xd);
-  print_vec(&vec);
-
-  vec_resize(&vec,32,NULL);
-  print_vec(&vec);
-
+  drop_vec(&vec);
   return 0;
 }
 
@@ -33,10 +28,16 @@ void print_vec(Vec* vec) {
   Vec this=*vec;
 
   int* arr=this.ptr;
-  for(int i=0;i<this.len;i++) {
+  for(usize i=0;i<this.len;i++) {
     printf("%d, ",arr[i]);
   }
   printf("\n");
+}
+
+void fill_vec(Vec* vec) {
+  for(int i=0;i<32;i++) {
+    vec_push(vec,&i);
+  }
 }
 
 

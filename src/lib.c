@@ -37,7 +37,7 @@ void vec_push(Self self,void* element) {
     vec_reserve(self,this.capacity);
   }
 
-  memmove(this.ptr+(this.BYTES_PER_ELEMENT*self->len++),element,this.BYTES_PER_ELEMENT);
+  memmove(self->ptr+(this.BYTES_PER_ELEMENT*self->len++),element,this.BYTES_PER_ELEMENT);
 }
 
 void vec_reserve(Self self,usize additional) {
@@ -77,7 +77,7 @@ void vec_append(Self self,Vec* other) {
   assert(this.BYTES_PER_ELEMENT==other_vec.BYTES_PER_ELEMENT);
 
   vec_reserve(self,other_vec.len);
-  memmove(this.ptr+(this.BYTES_PER_ELEMENT*this.len),other_vec.ptr,this.BYTES_PER_ELEMENT*other_vec.len);
+  memmove(self->ptr+(this.BYTES_PER_ELEMENT*this.len),other_vec.ptr,this.BYTES_PER_ELEMENT*other_vec.len);
 
   self->len+=other_vec.len;
   other->len=0;
@@ -108,7 +108,7 @@ void vec_insert(Self self,usize index,void* element) {
   Vec this=*self;
 
   if(len==this.capacity) vec_reserve(self,1);
-  void* dest=this.ptr+(index*this.BYTES_PER_ELEMENT);
+  void* dest=self->ptr+(index*this.BYTES_PER_ELEMENT);
 
   if(index<len) {
     // Shift everything over to make space.
@@ -160,7 +160,7 @@ void vec_resize(Self self,usize new_len,void* value) {
   usize required_len=new_len-this.len;
   vec_reserve(self,required_len);
 
-  void* ptr=this.ptr+(this.len*this.BYTES_PER_ELEMENT);
+  void* ptr=self->ptr+(this.len*this.BYTES_PER_ELEMENT);
   for(usize i=0;i<required_len;i++) {
     memmove(ptr,value,this.BYTES_PER_ELEMENT);
     ptr+=this.BYTES_PER_ELEMENT;
@@ -181,7 +181,7 @@ void vec_resize_with(Self self,usize new_len,void* (*f)(void)) {
   usize required_len=new_len-this.len;
   vec_reserve(self,required_len);
 
-  void* ptr=this.ptr+(this.len*this.BYTES_PER_ELEMENT);
+  void* ptr=self->ptr+(this.len*this.BYTES_PER_ELEMENT);
   for(usize i=0;i<required_len;i++) {
     void* value=f();
 
