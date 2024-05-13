@@ -3,11 +3,11 @@
 #include <string.h>
 
 
-Vec new_vec(usize BYTES_PER_ELEMENT,void (*destructor)(void*)) {
-  return new_vec_with_capacity(DEFAULT_SIZE,BYTES_PER_ELEMENT,destructor);
+Vec new_vec(usize BYTES_PER_ELEMENT,Destructor destructor) {
+  return new_vec_with_capacity(DEFAULT_CAPACITY,BYTES_PER_ELEMENT,destructor);
 }
 
-Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,void (*destructor)(void*)) {
+Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,Destructor destructor) {
   Vec self;
 
   self.BYTES_PER_ELEMENT=BYTES_PER_ELEMENT;

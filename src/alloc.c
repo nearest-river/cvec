@@ -24,7 +24,7 @@ void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
   self->ptr=new_ptr;
 }
 
-void _drop_in_place(void* ptr,usize count,usize BYTES_PER_ELEMENT,void (*destructor)(void*)) {
+void _drop_in_place(void* ptr,usize count,usize BYTES_PER_ELEMENT,Destructor destructor) {
   for(usize i=0;i<count;i++) {
     destructor(ptr);
     ptr+=BYTES_PER_ELEMENT;

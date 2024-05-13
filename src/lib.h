@@ -6,30 +6,34 @@ extern "C" {
 #endif
 
 #define MAX_CAPACITY 0x7fffffffUL
+#define DEFAULT_CAPACITY 16
+
 
 typedef __SIZE_TYPE__ usize;
+typedef void (*Destructor)(void*);
+
 
 /**
- * `Vec` shands for `vector`
+ * `Vec` stands for `vector`
  */
 typedef struct Vec {
   usize BYTES_PER_ELEMENT;
   usize len;
   usize capacity;
   void* ptr;
-  void (*destructor)(void*);
+  Destructor destructor;
 } Vec;
 typedef Vec* Self;
 
 
 /**
- * Constructs a new empty `Vec` with a capacity.
+ * Constructs a new empty `Vec` with default a capacity.
  */
-Vec new_vec(usize BYTES_PER_ELEMENT,void (*destructor)(void*));
+Vec new_vec(usize BYTES_PER_ELEMENT,Destructor destructor);
 /**
  * Construcs a new `Vec` with the specefied capacity.
  */
-Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,void (*destructor)(void*));
+Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,Destructor destructor);
 
 /**
  * Drops the `Vec` freeing all the resources held by the vector and its elements.
@@ -68,7 +72,7 @@ void vec_reserve(Self self,usize additional);
 /**
  * Reserves the minimum capacity for at least additional more elements to be inserted in the given `Vec`.
  * Unlike reserve, this will not deliberately over-allocate to speculatively avoid frequent allocations.
- * After calling `vec_reserve_exact`, capacity will be greater than or equal to self.len() + additional.
+ * After calling `vec_reserve_exact`, capacity will be greater than or equal to self->len + additional.
  * Does nothing if the capacity is already sufficient.
  * 
  * * Note that the allocator may give the collection more space than it requests.
