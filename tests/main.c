@@ -6,7 +6,7 @@ void print_vec(Vec* vec);
 void fill_vec(Vec* vec);
 
 int main(int argc,const char** argv) {
-  Vec vec=new_vec(sizeof(Vec),(void (*)(void*))drop_vec);
+  Vec vec=new_vec_with_capacity(MAX_CAPACITY,sizeof(Vec),(void (*)(void*))drop_vec);
 
   for(int i=0;i<32;i++) {
     Vec inner_vec=new_vec(sizeof(int),NULL);

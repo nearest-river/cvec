@@ -4,7 +4,7 @@
 
 void* alloc(usize size) {
   void* ptr=malloc(size);
-  if(!ptr) panic("Could'nt allocate memory.\nmalloc returned `NULL` pointer");
+  if(!ptr) panic("Could'nt allocate memory.\nmalloc returned `NULL` pointer\n");
 
   return ptr;
 }

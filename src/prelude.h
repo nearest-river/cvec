@@ -11,7 +11,7 @@
 
 #define not_null(ptr) assert(ptr)
 #define not_null2(ptr1,ptr2) assert(ptr1);assert(ptr2)
-#define panic(...) { printf(__VA_ARGS__);exit(1); }
+#define panic(...) { fprintf(stderr,__VA_ARGS__);exit(1); }
 
 #define bool unsigned char
 #define true 1
