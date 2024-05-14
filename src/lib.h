@@ -185,6 +185,18 @@ void vec_resize_with(Self self,usize new_len,void* (*f)(void));
  */
 void vec_retain(Self self,bool (*f)(void*));
 
+/**
+ * Shrinks the capacity of the vector with a lower bound.
+ * The capacity will remain at least as large as both the length and the supplied value.
+ * If the current capacity is less than the lower limit, this is a no-op.
+ */
+void vec_shrink_to(Self self,usize min_capacity);
+
+/**
+ * Shrinks the capacity of the vector to its length, so `self->len==self->capacity`.
+ */
+void vec_shrink_to_fit(Self self);
+
 
 #ifdef _cplusplus
 }

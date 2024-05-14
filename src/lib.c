@@ -208,4 +208,17 @@ void vec_retain(Self self,bool (*f)(void*)) {
   self->len=len;
 }
 
+void vec_shrink_to(Self self,usize min_capacity) {
+  Vec this=*self;
+  if(this.capacity<=min_capacity) return;
+  if(this.destructor) {
+    _drop_in_place(vec__index(this,min_capacity),this.capacity-min_capacity,this.BYTES_PER_ELEMENT,this.destructor);
+  }
 
+  self->ptr=realloc(this.ptr,min_capacity*this.BYTES_PER_ELEMENT);
+}
+
+
+void vec_shrink_to_fit(Self self) {
+  vec_shrink_to(self,self->len);
+}
