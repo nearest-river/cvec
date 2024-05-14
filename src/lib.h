@@ -4,6 +4,10 @@
 #ifdef _cplusplus
 extern "C" {
 #endif
+#ifndef _cplusplus
+#include <stdbool.h>
+#endif
+
 
 #define MAX_CAPACITY 0x7fffffffUL
 #define DEFAULT_CAPACITY 16
@@ -170,6 +174,16 @@ void vec_resize(Self self,usize new_len,void* value);
  * If you want to use the default values trait to generate values, you can pass `default` as the second argument.
  */
 void vec_resize_with(Self self,usize new_len,void* (*f)(void));
+
+/**
+ * Retains only the elements specified by the predicate.
+ * 
+ * In other words, remove all elements e for which `f(&element)` returns `false`.
+ * This method operates in place,
+ * visiting each element exactly once in the original order,
+ * and preserves the order of the retained elements.
+ */
+void vec_retain(Self self,bool (*f)(void*));
 
 
 #ifdef _cplusplus

@@ -191,4 +191,21 @@ void vec_resize_with(Self self,usize new_len,void* (*f)(void)) {
   }
 }
 
+void vec_retain(Self self,bool (*f)(void*)) {
+  Vec this=*self;
+  usize len=0;
+
+  void* ptr=this.ptr;
+  for(usize i=0;i<this.len;i++,ptr+=this.BYTES_PER_ELEMENT) {
+    if(!f(ptr)) {
+      if(this.destructor) this.destructor(ptr);
+      continue;
+    }
+
+    memmove(vec__index(this,len++),ptr,this.BYTES_PER_ELEMENT);
+  }
+
+  self->len=len;
+}
+
 

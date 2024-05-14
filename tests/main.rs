@@ -32,6 +32,7 @@ extern "C" {
   fn vec_truncate(this: &Vec,len: usize);
   fn vec_resize(this: &Vec,new_len: usize,value: *mut c_void);
   fn vec_resize_with(this: &Vec,new_len: usize,f: extern "C" fn(*mut c_void)-> *mut c_void);
+  fn vec_retain(this: &Vec,f: extern "C" fn(*mut i32)-> bool);
 }
 
 
@@ -44,24 +45,21 @@ fn main() {
 
 #[allow(invalid_value)]
 unsafe fn _main() {
-  let vec=new_vec(size_of::<Vec>(),mem::transmute(drop_vec as *mut c_void));
+  let vec=new_vec(size_of::<i32>(),mem::transmute(0usize));
 
-  for _ in 0..32 {
-    let mut inner_vec=new_vec(size_of::<i32>(),mem::transmute(0usize));
+  fill_vec(&vec);
+  vec_retain(&vec,is_even);
 
-    fill_vec(&inner_vec);
-    vec_push(&vec,&mut inner_vec as *mut _ as *mut c_void);
-  }
-
-  let arr=vec.ptr as *mut Vec;
+  let arr=vec.ptr as *mut i32;
   for i in 0..vec.len {
-    print_vec(arr.offset(i as _).as_ref().unwrap(),i);
+    print!("{},",*arr.add(i));
   }
+  println!();
 
   drop_vec(&vec);
 }
 
-
+#[allow(dead_code)]
 unsafe fn print_vec(this: &Vec,idx: usize) {
   print!("{idx}: ");
   for i in std::slice::from_raw_parts(this.ptr as *mut i32,this.len) {
@@ -76,4 +74,9 @@ unsafe fn fill_vec(this: &Vec) {
   }
 }
 
+extern "C" fn is_even(ptr: *mut i32)-> bool {
+  unsafe {
+    *ptr%2==0
+  }
+}
 
