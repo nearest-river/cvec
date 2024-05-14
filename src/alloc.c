@@ -19,12 +19,19 @@ void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
 
   void* new_ptr=realloc(this.ptr,cap*this.BYTES_PER_ELEMENT);
 
-  not_null(new_ptr);
+  if(!new_ptr) {
+    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
+    free(this.ptr);
+    panic("Couldn't grow the vector.\n");
+  }
+
   self->capacity=cap;
   self->ptr=new_ptr;
 }
 
 void _drop_in_place(void* ptr,usize count,usize BYTES_PER_ELEMENT,Destructor destructor) {
+  if(!destructor) return;
+
   for(usize i=0;i<count;i++) {
     destructor(ptr);
     ptr+=BYTES_PER_ELEMENT;

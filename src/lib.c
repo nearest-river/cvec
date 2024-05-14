@@ -22,9 +22,8 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,Destructor dest
 void drop_vec(Self self) {
   Vec this=*self;
 
-  if(this.destructor) {
-    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
-  }
+
+  _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
   free(self->ptr);
 }
 
@@ -96,9 +95,8 @@ void vec_extend(Self self,void* data,usize len) {
 void vec_clear(Self self) {
   not_null(self);
   Vec this=*self;
-  if(this.destructor) {
-    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
-  }
+  _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
+
 
   self->len=0;
 }
@@ -142,10 +140,7 @@ void vec_truncate(Self self,usize len) {
 
   if(len>this.len) return;
   self->len=len;
-
-  if(!this.destructor) return;
-  usize count=this.len-len;// old_len-new_len
-  _drop_in_place(this.ptr,count,this.BYTES_PER_ELEMENT,this.destructor);
+  _drop_in_place(this.ptr,this.len-len,this.BYTES_PER_ELEMENT,this.destructor);
 }
 
 void vec_resize(Self self,usize new_len,void* value) {
@@ -211,9 +206,7 @@ void vec_retain(Self self,bool (*f)(void*)) {
 void vec_shrink_to(Self self,usize min_capacity) {
   Vec this=*self;
   if(this.capacity<=min_capacity) return;
-  if(this.destructor) {
-    _drop_in_place(vec__index(this,min_capacity),this.capacity-min_capacity,this.BYTES_PER_ELEMENT,this.destructor);
-  }
+  _drop_in_place(vec__index(this,min_capacity),this.capacity-min_capacity,this.BYTES_PER_ELEMENT,this.destructor);
 
   self->ptr=realloc(this.ptr,min_capacity*this.BYTES_PER_ELEMENT);
 }
