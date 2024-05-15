@@ -2,6 +2,7 @@
 #include "alloc.h"
 #include <string.h>
 
+typedef Vec* Self;
 
 Vec new_vec(usize BYTES_PER_ELEMENT,Destructor destructor) {
   return new_vec_with_capacity(DEFAULT_CAPACITY,BYTES_PER_ELEMENT,destructor);

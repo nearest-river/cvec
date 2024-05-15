@@ -27,7 +27,7 @@ typedef struct Vec {
   void* ptr;
   Destructor destructor;
 } Vec;
-typedef Vec* Self;
+
 
 
 /**
@@ -44,7 +44,7 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,Destructor dest
  * 
  * * Note its the user's responsiblity to free the `self` pointer. (only if it's heap allocated)
  */
-void drop_vec(Self self);
+void drop_vec(Vec* self);
 
 /**
  * Pushes an element to the back of the `Vec`.
@@ -52,7 +52,7 @@ void drop_vec(Self self);
  * * `element` is moved afterwords.
  * * It's the user's responsiblity to free `element`. (only if it's heap allocated)
  */
-void vec_push(Self self,void* element);
+void vec_push(Vec* self,void* element);
 
 /**
  * Pops the last element of the `Vec`
@@ -60,7 +60,7 @@ void vec_push(Self self,void* element);
  * * The element is moved afterwords.
  * * It's the user's responsiblity to drop `element`.
  */
-void* vec_pop(Self self);
+void* vec_pop(Vec* self);
 
 /**
  * Reserves capacity for at least `additional` more elements to be inserted in the given `Vec`.
@@ -71,7 +71,7 @@ void* vec_pop(Self self);
  * ## Panics
  * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
-void vec_reserve(Self self,usize additional);
+void vec_reserve(Vec* self,usize additional);
 
 /**
  * Reserves the minimum capacity for at least additional more elements to be inserted in the given `Vec`.
@@ -86,7 +86,7 @@ void vec_reserve(Self self,usize additional);
  * ## Panics
  * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
-void vec_reserve_exact(Self self,usize additional);
+void vec_reserve_exact(Vec* self,usize additional);
 
 /**
  * Moves all the elements of other into `self`, leaving `other` empty.
@@ -94,7 +94,7 @@ void vec_reserve_exact(Self self,usize additional);
  * ## Panics
  * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
-void vec_append(Self self,Vec* other);
+void vec_append(Vec* self,Vec* other);
 
 /**
  * Clones and appends all elements in `data` to the `Vec`.
@@ -102,14 +102,14 @@ void vec_append(Self self,Vec* other);
  * Iterates over the `data`, clones each element, and then appends it to this `Vec`.
  * The `data` is traversed in-order.
  */
-void vec_extend(Self self,void* data,usize len);
+void vec_extend(Vec* self,void* data,usize len);
 
 /**
  * Clears the vector, removing all values.
  * * Note that this method has no effect on the allocated memory or capacity of the vector.
  * * The destructor can simply be `NULL` if `T` doesn't hold any resource.
  */
-void vec_clear(Self self);
+void vec_clear(Vec* self);
 
 /**
  * Inserts an `element` at position `index` within the vector, shifting all elements after it to the right.
@@ -117,7 +117,7 @@ void vec_clear(Self self);
  * ## Panics
  * Panics if `index > len`.
  */
-void vec_insert(Self self,usize index,void* element);
+void vec_insert(Vec* self,usize index,void* element);
 
 /**
  * Removes and returns the element at position `index` within the vector, shifting all elements after it to the left.
@@ -129,7 +129,7 @@ void vec_insert(Self self,usize index,void* element);
  * ## Panics
  * Panics if index is out of bounds.
  */
-void* vec_remove(Self self,usize index);
+void* vec_remove(Vec* self,usize index);
 
 /**
  * Shortens the vector, keeping the first `len` elements and dropping the rest.
@@ -140,7 +140,7 @@ void* vec_remove(Self self,usize index);
  * 
  * * Note that this method has no effect on the allocated capacity of the vector.
  */
-void vec_truncate(Self self,usize len);
+void vec_truncate(Vec* self,usize len);
 
 /**
  * Resizes the `Vec` in-place so that `len` is equal to `new_len`.
@@ -158,7 +158,7 @@ void vec_truncate(Self self,usize len);
  * ## Safety
  * * Note that if `value` holds any resources, it may be freed more than once so be careful or prefer using `vec_resize_with`.
  */
-void vec_resize(Self self,usize new_len,void* value);
+void vec_resize(Vec* self,usize new_len,void* value);
 
 /**
  * Resizes the `Vec` in-place so that `len` is equal to `new_len`.
@@ -173,7 +173,7 @@ void vec_resize(Self self,usize new_len,void* value);
  * If you'd rather `Clone` a given value, use `vec_resize`.
  * If you want to use the default values trait to generate values, you can pass `default` as the second argument.
  */
-void vec_resize_with(Self self,usize new_len,void* (*f)(void));
+void vec_resize_with(Vec* self,usize new_len,void* (*f)(void));
 
 /**
  * Retains only the elements specified by the predicate.
@@ -183,19 +183,19 @@ void vec_resize_with(Self self,usize new_len,void* (*f)(void));
  * visiting each element exactly once in the original order,
  * and preserves the order of the retained elements.
  */
-void vec_retain(Self self,bool (*f)(void*));
+void vec_retain(Vec* self,bool (*f)(void*));
 
 /**
  * Shrinks the capacity of the vector with a lower bound.
  * The capacity will remain at least as large as both the length and the supplied value.
  * If the current capacity is less than the lower limit, this is a no-op.
  */
-void vec_shrink_to(Self self,usize min_capacity);
+void vec_shrink_to(Vec* self,usize min_capacity);
 
 /**
  * Shrinks the capacity of the vector to its length, so `self->len==self->capacity`.
  */
-void vec_shrink_to_fit(Self self);
+void vec_shrink_to_fit(Vec* self);
 
 
 #ifdef _cplusplus
