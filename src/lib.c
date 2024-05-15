@@ -228,3 +228,17 @@ Slice vec_spare_capacity(Self self) {
   return slice;
 }
 
+// TODO(nate): fix ownership issue.
+void* vec_swap_remove(Self self,usize index) {
+  Vec this=*self;
+  assert(this.len>index);
+
+  void* ret=alloc(this.BYTES_PER_ELEMENT);
+  void* src=vec__index(this,index);
+
+  memmove(ret,src,this.BYTES_PER_ELEMENT);
+  memmove(vec__index(this,this.len),ret,this.BYTES_PER_ELEMENT);
+
+  return ret;
+}
+

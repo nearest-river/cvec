@@ -213,6 +213,16 @@ void vec_shrink_to_fit(Vec* self);
  */
 Slice vec_spare_capacity(Vec* self);
 
+/**
+ * Removes an element from the vector and returns it.
+ * The removed element is replaced by the last element of the vector.
+ * This does not preserve ordering, but is O(1).
+ * If you need to preserve the element order, use `vec_remove` instead.
+ * 
+ * ## Panics
+ * * Panics if index is out of bounds.
+ */
+void* vec_swap_remove(Vec* self,usize index);
 
 #ifdef _cplusplus
 }
