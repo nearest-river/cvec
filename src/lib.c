@@ -216,3 +216,15 @@ void vec_shrink_to(Self self,usize min_capacity) {
 void vec_shrink_to_fit(Self self) {
   vec_shrink_to(self,self->len);
 }
+
+Slice vec_spare_capacity(Self self) {
+  Vec this=*self;
+  Slice slice={
+    .BYTES_PER_ELEMENT=this.BYTES_PER_ELEMENT,
+    .data=vec__index(this,this.len),
+    .len=this.capacity-this.capacity
+  };
+
+  return slice;
+}
+

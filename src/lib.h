@@ -8,7 +8,6 @@ extern "C" {
 #include <stdbool.h>
 #endif
 
-
 #define MAX_CAPACITY 0x7fffffffUL
 #define DEFAULT_CAPACITY 16
 
@@ -27,6 +26,16 @@ typedef struct Vec {
   void* ptr;
   Destructor destructor;
 } Vec;
+
+/**
+ * The `Slice` type.
+ * It holds a reference to some contigious data somewhere in the memory.
+ */
+typedef struct Slice {
+  usize BYTES_PER_ELEMENT;
+  usize len;
+  void* data;
+} Slice;
 
 
 
@@ -196,6 +205,13 @@ void vec_shrink_to(Vec* self,usize min_capacity);
  * Shrinks the capacity of the vector to its length, so `self->len==self->capacity`.
  */
 void vec_shrink_to_fit(Vec* self);
+
+/**
+ * Returns the remaining spare capacity of the vector as a slice.
+ * The returned slice can be used to fill the vector with data.
+ * (e.g. by reading from a file) before marking the data as initialized.
+ */
+Slice vec_spare_capacity(Vec* self);
 
 
 #ifdef _cplusplus
