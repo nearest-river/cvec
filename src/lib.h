@@ -26,6 +26,13 @@ typedef void (*Destructor)(void*);
  */
 typedef void (*Cloner)(void*,void*);
 
+/**
+ * This virtual table keeping track of the resources held by the `Vec`.
+ */
+typedef struct VecVTable {
+  Destructor destructor;
+  Cloner cloner;
+} VecVTable;
 
 /**
  * `Vec` stands for `vector`
@@ -48,13 +55,6 @@ typedef struct Slice {
   void* data;
 } Slice;
 
-/**
- * This virtual table keeping track of the resources held by the `Vec`.
- */
-typedef struct VecVTable {
-  Destructor destructor;
-  Cloner cloner;
-} VecVTable;
 
 
 /**

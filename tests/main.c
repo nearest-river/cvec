@@ -13,7 +13,11 @@ int main() {
 
 
 void test_bytes() {
-  Vec vec=new_vec_with_capacity(MAX_CAPACITY,sizeof(unsigned char),NULL);
+  VecVTable vtable={
+    .cloner=NULL,
+    .destructor=NULL
+  };
+  Vec vec=new_vec_with_capacity(MAX_CAPACITY,sizeof(unsigned char),vtable);
 
   for(char c='A';c<='z';c++) {
     if(c-1=='Z') c='a';
