@@ -20,9 +20,9 @@ typedef __SIZE_TYPE__ usize;
 typedef void (*Destructor)(void*);
 
 /**
- * A function that clones `self` to `dest` without forgetting about the resources held by `self`.
+ * A function that clones from `src` to `dest` without forgetting about the resources held by `self`.
  * 
- * * Params: `(void* self,void* dest)`.
+ * * Params: `(void* dest,void* src)`.
  */
 typedef void (*Cloner)(void*,void*);
 

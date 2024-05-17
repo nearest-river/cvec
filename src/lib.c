@@ -160,7 +160,7 @@ void vec_resize(Self self,usize new_len,void* value) {
 
   if(this.vtable.cloner) {
     for(usize i=0;i<required_len;i++) {
-      this.vtable.cloner(value,ptr);
+      this.vtable.cloner(ptr,value);
       ptr+=this.BYTES_PER_ELEMENT;
     }
   } else {
@@ -243,11 +243,12 @@ void* vec_swap_remove(Self self,usize index) {
   void* ret=alloc(this.BYTES_PER_ELEMENT);
   void* src=vec__index(this,index);
 
-  memmove(ret,src,this.BYTES_PER_ELEMENT);
   if(this.vtable.cloner) {
-    this.vtable.cloner(vec__index(this,this.len),src);
+    this.vtable.cloner(ret,src);
+    this.vtable.cloner(src,vec__index(this,this.len));
   } else {
-    memmove(vec__index(this,this.len),src,this.BYTES_PER_ELEMENT);
+    memmove(ret,src,this.BYTES_PER_ELEMENT);
+    memmove(src,vec__index(this,this.len),this.BYTES_PER_ELEMENT);
   }
 
   return ret;
