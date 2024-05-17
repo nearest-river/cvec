@@ -176,14 +176,11 @@ void vec_truncate(Vec* self,usize len);
  * with each additional slot filled with value.
  * If `new_len` is less than `len`, the `Vec` is simply truncated.
  * 
- * This method shallow-copies `value` byte-by-byte.
- * If you need more flexibility use `vec_resize_with`.
- * If you only need to resize to a smaller size, use `vec_truncate`.
+ * * This method clones `value` with the cloner function.
+ * * If you need more flexibility use `vec_resize_with`.
+ * * If you only need to resize to a smaller size, use `vec_truncate`.
  * 
- * * Note that freeing `value` is the user's responsiblity.
- * 
- * ## Safety
- * * Note that if `value` holds any resources, it may be freed more than once so be careful or prefer using `vec_resize_with`.
+ * * Note that freeing the `value` pointer is the user's responsiblity. (only if it is allocated on the heap)
  */
 void vec_resize(Vec* self,usize new_len,void* value);
 

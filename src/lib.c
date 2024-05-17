@@ -157,9 +157,17 @@ void vec_resize(Self self,usize new_len,void* value) {
   vec_reserve(self,required_len);
 
   void* ptr=ptr__index(self->ptr,this.len,this.BYTES_PER_ELEMENT);
-  for(usize i=0;i<required_len;i++) {
-    memmove(ptr,value,this.BYTES_PER_ELEMENT);
-    ptr+=this.BYTES_PER_ELEMENT;
+
+  if(this.vtable.cloner) {
+    for(usize i=0;i<required_len;i++) {
+      this.vtable.cloner(value,ptr);
+      ptr+=this.BYTES_PER_ELEMENT;
+    }
+  } else {
+    for(usize i=0;i<required_len;i++) {
+      memmove(ptr,value,this.BYTES_PER_ELEMENT);
+      ptr+=this.BYTES_PER_ELEMENT;
+    }
   }
 
   self->len=new_len;
@@ -228,7 +236,6 @@ Slice vec_spare_capacity(Self self) {
   return slice;
 }
 
-// TODO(nate): fix ownership issue.
 void* vec_swap_remove(Self self,usize index) {
   Vec this=*self;
   assert(this.len>index);
@@ -237,7 +244,11 @@ void* vec_swap_remove(Self self,usize index) {
   void* src=vec__index(this,index);
 
   memmove(ret,src,this.BYTES_PER_ELEMENT);
-  memmove(vec__index(this,this.len),ret,this.BYTES_PER_ELEMENT);
+  if(this.vtable.cloner) {
+    this.vtable.cloner(vec__index(this,this.len),src);
+  } else {
+    memmove(vec__index(this,this.len),src,this.BYTES_PER_ELEMENT);
+  }
 
   return ret;
 }
