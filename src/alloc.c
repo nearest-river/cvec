@@ -21,7 +21,7 @@ void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
   void* new_ptr=realloc(this.ptr,cap*this.BYTES_PER_ELEMENT);
 
   if(!new_ptr) {
-    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.destructor);
+    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.vtable.destructor);
     free(this.ptr);
     panic("Couldn't grow the vector.\n");
   }

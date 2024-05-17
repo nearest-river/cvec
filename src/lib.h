@@ -13,7 +13,18 @@ extern "C" {
 
 
 typedef __SIZE_TYPE__ usize;
+
+/**
+ * A function that frees the resources held by `self`.
+ */
 typedef void (*Destructor)(void*);
+
+/**
+ * A function that clones `self` to `dest` without forgetting about the resources held by `self`.
+ * 
+ * * Params: `(void* self,void* dest)`.
+ */
+typedef void (*Cloner)(void*,void*);
 
 
 /**
@@ -23,8 +34,8 @@ typedef struct Vec {
   usize BYTES_PER_ELEMENT;
   usize len;
   usize capacity;
+  VecVTable vtable;
   void* ptr;
-  Destructor destructor;
 } Vec;
 
 /**
@@ -37,16 +48,23 @@ typedef struct Slice {
   void* data;
 } Slice;
 
+/**
+ * This virtual table keeping track of the resources held by the `Vec`.
+ */
+typedef struct VecVTable {
+  Destructor destructor;
+  Cloner cloner;
+} VecVTable;
 
 
 /**
  * Constructs a new empty `Vec` with default a capacity.
  */
-Vec new_vec(usize BYTES_PER_ELEMENT,Destructor destructor);
+Vec new_vec(usize BYTES_PER_ELEMENT,VecVTable vtable);
 /**
  * Construcs a new `Vec` with the specefied capacity.
  */
-Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,Destructor destructor);
+Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable);
 
 /**
  * Drops the `Vec` freeing all the resources held by the vector and its elements.
