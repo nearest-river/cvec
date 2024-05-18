@@ -1,9 +1,4 @@
-#![allow(incomplete_features)]
-#![feature(specialization)]
-#[allow(dead_code)]
-mod cvec;
-use cvec::*;
-
+use cvec::CVec;
 
 
 

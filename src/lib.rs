@@ -1,14 +1,6 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+#![allow(incomplete_features,unused_attributes,dead_code)]
+#![feature(specialization)]
+mod cvec;
+pub(crate) mod bindings;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use cvec::*;
