@@ -10,7 +10,7 @@ ensure_dir "include";
 ensure_dir "bin";
 
 cd include;
-gcc -Wall -g -c ../src/*.c;
+gcc -Wall -g -c ../lib/*.c;
 ar -rc "./lib$1.a" *.o
 rm -f *.o
 
