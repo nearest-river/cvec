@@ -30,18 +30,18 @@ typedef void (*Cloner)(void*,void*);
  * This virtual table keeping track of the resources held by the `Vec`.
  */
 typedef struct VecVTable {
-  Destructor destructor;
-  Cloner cloner;
+  const Destructor destructor;
+  const Cloner cloner;
 } VecVTable;
 
 /**
  * `Vec` stands for `vector`
  */
 typedef struct Vec {
-  usize BYTES_PER_ELEMENT;
+  const usize BYTES_PER_ELEMENT;
   usize len;
   usize capacity;
-  VecVTable vtable;
+  const VecVTable vtable;
   void* ptr;
 } Vec;
 
