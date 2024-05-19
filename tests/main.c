@@ -1,38 +1,84 @@
 #include <stdio.h>
-#include "../src/lib.h"
 #include <stdlib.h>
+#include <string.h>
+#include "../lib/lib.h"
 
-void test_bytes();
-bool is_even(void* ptr);
+#define DUMMY_TXT "lol..xd"
+#define DUMMY_TXT_LEN 7
 
-int main() {
-  test_bytes();
+Vec read_file(FILE* file);
+void drop_file(void*);
+
+void test_files();
+void test_buf();
+
+
+int main(int argc,const char** argv) {
+  test_files();
   return 0;
 }
 
 
-
-void test_bytes() {
-  VecVTable vtable={
-    .cloner=NULL,
-    .destructor=NULL
-  };
-  Vec vec=new_vec_with_capacity(MAX_CAPACITY,sizeof(unsigned char),vtable);
-
-  for(char c='A';c<='z';c++) {
-    if(c-1=='Z') c='a';
-    vec_push(&vec,&c);
+void test_buf() {
+  FILE* file=fopen("./target/tmp/xt.txt","r");
+  if(NULL==file) {
+    perror("File not found.");
+    exit(1);
   }
 
-  vec_retain(&vec,is_even);
+  Vec buf=new_vec_with_capacity(120,sizeof(char),(VecVTable){NULL,NULL});
 
-  for(usize i=0;i<vec.len;i++) {
-    printf("%c, ",((unsigned char*)vec.ptr)[i]);
+  for(char c=fgetc(file);EOF!=c;c=fgetc(file)) {
+    vec_push(&buf,&c);
   }
-  printf("len: %ld\n",vec.len);
+  char* str=buf.ptr;
+
+  puts(str);
+  printf("len: %ld\n",buf.len);
 }
 
-bool is_even(void* ptr) {
-  return *((int*)ptr)%2==0;
+void test_files() {
+  VecVTable vtable={
+    .cloner=NULL,
+    .destructor=drop_file
+  };
+  Vec vec=new_vec(sizeof(FILE*),vtable);
+  char path[]="./target/tmp/xd0.txt";
+
+  for(int i=0;i<10;i++) {
+    path[0xF]=i+48;
+    FILE* f=fopen(path,"w+");
+
+    fprintf(f,DUMMY_TXT);
+    fclose(f);
+
+    FILE* file=fopen(path,"r");
+    vec_push(&vec,&file);
+  }
+
+  FILE** files=vec.ptr;
+  for(int i=0;i<vec.len;i++) {
+    Vec buf=read_file(files[i]);
+
+    printf("file %d: %s, len: %ld\n",i,(char*)buf.ptr,buf.len);
+    drop_vec(&buf);
+  }
+
+  // free(buf);
+  drop_vec(&vec);
+}
+
+Vec read_file(FILE* file) {
+  Vec buf=new_vec(sizeof(char),(VecVTable){NULL,NULL});
+
+  for(char c=fgetc(file);EOF!=c;c=fgetc(file)) {
+    vec_push(&buf,&c);
+  }
+
+  return buf;
+}
+
+void drop_file(void* file) {
+  fclose(*((FILE**)file));
 }
 
