@@ -3,7 +3,7 @@
 
 
 
-void* alloc(usize size) {
+void* __alloc(usize size) {
   void* ptr=malloc(size);
   if(!ptr) panic("Could'nt allocate memory.\nmalloc returned `NULL` pointer\n");
 

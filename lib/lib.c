@@ -4,17 +4,17 @@
 
 typedef Vec* Self;
 
-Vec new_vec(usize BYTES_PER_ELEMENT,VecVTable vtable) {
+inline Vec new_vec(usize BYTES_PER_ELEMENT,VecVTable vtable) {
   return new_vec_with_capacity(DEFAULT_CAPACITY,BYTES_PER_ELEMENT,vtable);
 }
 
-Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable) {
+inline Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable) {
   Vec self={
     .BYTES_PER_ELEMENT=BYTES_PER_ELEMENT,
     .len=0,
     .capacity=capacity,
     .vtable=vtable,
-    .ptr=alloc(capacity*BYTES_PER_ELEMENT)
+    .ptr=__alloc(capacity*BYTES_PER_ELEMENT)
   };
 
   return self;
@@ -22,7 +22,6 @@ Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtabl
 
 void drop_vec(Self self) {
   Vec this=*self;
-
 
   _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.vtable.destructor);
   free(self->ptr);
@@ -63,7 +62,7 @@ void vec_reserve_exact(Self self,usize additional) {
 void* vec_pop(Self self) {
   not_null(self);
   Vec this=*self;
-  void* element=alloc(this.BYTES_PER_ELEMENT);
+  void* element=__alloc(this.BYTES_PER_ELEMENT);
 
   memmove(element,vec__index(this,--self->len),this.BYTES_PER_ELEMENT);
   return element;
@@ -98,7 +97,6 @@ void vec_clear(Self self) {
   Vec this=*self;
   _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.vtable.destructor);
 
-
   self->len=0;
 }
 
@@ -126,7 +124,7 @@ void* vec_remove(Self self,usize index) {
 
   if(index>=this.len) panic("removal index (is %ld) should be < len (is %ld)",index,this.len);
   void* ptr=vec__index(this,index);
-  void* ret=malloc(this.BYTES_PER_ELEMENT);
+  void* ret=__alloc(this.BYTES_PER_ELEMENT);
 
   memmove(ret,ptr,this.BYTES_PER_ELEMENT);
   memmove(ptr,ptr+this.BYTES_PER_ELEMENT,this.BYTES_PER_ELEMENT*(this.len-index-1));// Shifting
@@ -225,7 +223,7 @@ void vec_shrink_to_fit(Self self) {
   vec_shrink_to(self,self->len);
 }
 
-Slice vec_spare_capacity(Self self) {
+inline Slice vec_spare_capacity(Self self) {
   Vec this=*self;
   Slice slice={
     .BYTES_PER_ELEMENT=this.BYTES_PER_ELEMENT,
@@ -240,7 +238,7 @@ void* vec_swap_remove(Self self,usize index) {
   Vec this=*self;
   assert(this.len>index);
 
-  void* ret=alloc(this.BYTES_PER_ELEMENT);
+  void* ret=__alloc(this.BYTES_PER_ELEMENT);
   void* src=vec__index(this,index);
 
   if(this.vtable.cloner) {
