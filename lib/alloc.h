@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 void* __alloc(usize size);
-void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional);
+void _vec_grow_amortized(Vec* self,usize additional);
 void _drop_in_place(void* ptr,usize count,usize BYTES_PER_ELEMENT,Destructor destructor);
 
 #ifdef _cplusplus

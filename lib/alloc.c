@@ -10,15 +10,14 @@ inline void* __alloc(usize size) {
   return ptr;
 }
 
-void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
-  Vec this=*self;
-  const usize MIN_NON_ZERO_CAPACITY=MIN_NON_ZERO_CAP(this.BYTES_PER_ELEMENT);
+void _vec_grow_amortized(Vec* self,usize additional) {
+  const usize MIN_NON_ZERO_CAPACITY=MIN_NON_ZERO_CAP(self->BYTES_PER_ELEMENT);
 
-  usize required_cap=len+additional;
-  usize cap0=max(capacity*2,required_cap);
+  usize required_cap=self->len+additional;
+  usize cap0=max(self->capacity*2,required_cap);
   usize cap=max(cap0,MIN_NON_ZERO_CAPACITY);
 
-  void* new_ptr=realloc(this.ptr,cap*this.BYTES_PER_ELEMENT);
+  void* new_ptr=realloc(self->ptr,cap*self->BYTES_PER_ELEMENT);
   if(!new_ptr) return;
 
   self->capacity=cap;
