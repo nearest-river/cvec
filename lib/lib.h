@@ -11,7 +11,12 @@ extern "C" {
 #define MAX_CAPACITY 0x7fffffffUL
 #define DEFAULT_CAPACITY 16
 
-
+/**
+ * The pointer-sized unsigned integer type.
+ * 
+ * The size of this primitive is how many bytes it takes to reference any location in memory.
+ * For example, on a 32 bit target, this is 4 bytes and on a 64 bit target, this is 8 bytes.
+ */
 typedef __SIZE_TYPE__ usize;
 
 /**
@@ -96,7 +101,7 @@ void* vec_pop(Vec* self);
  * Does nothing if capacity is already sufficient.
  * 
  * ## Panics
- * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
+ * This function might if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
 void vec_reserve(Vec* self,usize additional);
 
@@ -111,7 +116,7 @@ void vec_reserve(Vec* self,usize additional);
  * Prefer `vec_reserve` if future insertions are expected.
  * 
  * ## Panics
- * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
+ * This function might if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
 void vec_reserve_exact(Vec* self,usize additional);
 
@@ -119,7 +124,7 @@ void vec_reserve_exact(Vec* self,usize additional);
  * Moves all the elements of other into `self`, leaving `other` empty.
  * 
  * ## Panics
- * Panics if the new capacity exceeds `MAX_CAPACITY` bytes.
+ * This function might if the new capacity exceeds `MAX_CAPACITY` bytes.
  */
 void vec_append(Vec* self,Vec* other);
 
@@ -134,7 +139,6 @@ void vec_extend(Vec* self,void* data,usize len);
 /**
  * Clears the vector, removing all values.
  * * Note that this method has no effect on the allocated memory or capacity of the vector.
- * * The destructor can simply be `NULL` if `T` doesn't hold any resource.
  */
 void vec_clear(Vec* self);
 
