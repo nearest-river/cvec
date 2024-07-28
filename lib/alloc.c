@@ -3,7 +3,7 @@
 
 
 
-void* __alloc(usize size) {
+inline void* __alloc(usize size) {
   void* ptr=malloc(size);
   if(!ptr) panic("Could'nt allocate memory.\nmalloc returned `NULL` pointer\n");
 
@@ -19,12 +19,7 @@ void _vec_grow_amortized(Vec* self,usize capacity,usize len,usize additional) {
   usize cap=max(cap0,MIN_NON_ZERO_CAPACITY);
 
   void* new_ptr=realloc(this.ptr,cap*this.BYTES_PER_ELEMENT);
-
-  if(!new_ptr) {
-    _drop_in_place(this.ptr,this.len,this.BYTES_PER_ELEMENT,this.vtable.destructor);
-    free(this.ptr);
-    panic("Couldn't grow the vector.\n");
-  }
+  if(!new_ptr) return;
 
   self->capacity=cap;
   self->ptr=new_ptr;
