@@ -3,14 +3,14 @@
 
 
 
-static inline void* __alloc(usize size) {
+inline void* __alloc(usize size) {
   void* ptr=malloc(size);
   if(!ptr) panic("Could'nt allocate memory.\nmalloc returned `NULL` pointer\n");
 
   return ptr;
 }
 
-static bool _vec_grow_amortized(Vec* self,usize additional) {
+bool _vec_grow_amortized(Vec* self,usize additional) {
   const usize MIN_NON_ZERO_CAPACITY=MIN_NON_ZERO_CAP(self->BYTES_PER_ELEMENT);
 
   usize required_cap=self->len+additional;
@@ -25,7 +25,7 @@ static bool _vec_grow_amortized(Vec* self,usize additional) {
   return true;
 }
 
-static void _drop_in_place(void* ptr,usize count,usize BYTES_PER_ELEMENT,Destructor destructor) {
+void _drop_in_place(void* ptr,usize count,usize BYTES_PER_ELEMENT,Destructor destructor) {
   if(!destructor) return;
 
   for(usize i=0;i<count;i++) {

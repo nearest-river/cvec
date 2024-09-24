@@ -65,12 +65,12 @@ typedef struct Slice {
 /**
  * Constructs a new empty `Vec` with default a capacity.
  */
-inline Vec new_vec(usize BYTES_PER_ELEMENT,VecVTable vtable);
+Vec new_vec(usize BYTES_PER_ELEMENT,VecVTable vtable);
 
 /**
  * Construcs a new `Vec` with the specefied capacity.
  */
-inline Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable);
+Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable);
 
 /**
  * Drops the `Vec` freeing all the resources held by the vector and its elements.
