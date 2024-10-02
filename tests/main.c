@@ -26,7 +26,7 @@ void test_buf() {
     exit(1);
   }
 
-  Vec buf=new_vec_with_capacity(120,sizeof(char),(VecVTable){NULL,NULL});
+  Vec buf=vec_with_capacity(120,sizeof(char),(VecVTable){NULL,NULL});
 
   for(char c=fgetc(file);EOF!=c;c=fgetc(file)) {
     vec_push(&buf,&c);
@@ -42,7 +42,7 @@ void test_files() {
     .cloner=NULL,
     .destructor=drop_file
   };
-  Vec vec=new_vec(sizeof(FILE*),vtable);
+  Vec vec=vec_new(sizeof(FILE*),vtable);
   char path[]="./target/tmp/xd0.txt";
 
   for(int i=0;i<10;i++) {
@@ -69,7 +69,7 @@ void test_files() {
 }
 
 Vec read_file(FILE* file) {
-  Vec buf=new_vec(sizeof(char),(VecVTable){NULL,NULL});
+  Vec buf=vec_new(sizeof(char),(VecVTable){NULL,NULL});
 
   for(char c=fgetc(file);EOF!=c;c=fgetc(file)) {
     vec_push(&buf,&c);

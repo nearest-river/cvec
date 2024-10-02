@@ -66,7 +66,7 @@ impl<T> CVec<T> {
   pub fn new()-> CVec<T> {
     CVec {
       inner: unsafe {
-        new_vec(
+        vec_new(
           mem::size_of::<T>(),
           VecVTable {
             destructor: destructor::<T>,
@@ -81,7 +81,7 @@ impl<T> CVec<T> {
   pub fn with_capacity(capacity: usize)-> CVec<T> {
     CVec {
       inner: unsafe {
-        new_vec_with_capacity(
+        vec_with_capacity(
           capacity,
           mem::size_of::<T>(),
           VecVTable {

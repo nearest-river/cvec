@@ -4,11 +4,11 @@
 
 typedef Vec* Self;
 
-inline Vec new_vec(usize BYTES_PER_ELEMENT,VecVTable vtable) {
-  return new_vec_with_capacity(DEFAULT_CAPACITY,BYTES_PER_ELEMENT,vtable);
+inline Vec vec_new(usize BYTES_PER_ELEMENT,VecVTable vtable) {
+  return vec_with_capacity(DEFAULT_CAPACITY,BYTES_PER_ELEMENT,vtable);
 }
 
-inline Vec new_vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable) {
+inline Vec vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vtable) {
   Vec self={
     .BYTES_PER_ELEMENT=BYTES_PER_ELEMENT,
     .len=0,

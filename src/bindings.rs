@@ -8,8 +8,8 @@ use std::ffi::c_void;
 #[link(name="cvec",kind="static")]
 #[allow(dead_code)]
 extern "C" {
-  pub(crate) fn new_vec(bytes_per_element: usize,vtable: VecVTable)-> RawCVec;
-  pub(crate) fn new_vec_with_capacity(capacity: usize,bytes_per_element: usize,vtable: VecVTable)-> RawCVec;
+  pub(crate) fn vec_new(bytes_per_element: usize,vtable: VecVTable)-> RawCVec;
+  pub(crate) fn vec_with_capacity(capacity: usize,bytes_per_element: usize,vtable: VecVTable)-> RawCVec;
   pub(crate) fn drop_vec(this: &mut RawCVec);
   pub(crate) fn vec_push(this: &mut RawCVec,element: *mut c_void);
   pub(crate) fn vec_pop(this: &mut RawCVec);
