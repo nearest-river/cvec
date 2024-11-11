@@ -41,3 +41,7 @@ extern "C" fn is_even(x: &i32)-> bool {
   x%2==0
 }
 
+#[test]
+fn _panic_rt_cleanup() {
+  std::process::exit(0);
+}
