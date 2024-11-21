@@ -1,0 +1,3 @@
+[submodule "include/cstd-def"]
+	path = include/cstd-def
+	url = https://github.com/nearest-river/cstd-def

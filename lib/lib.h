@@ -1,42 +1,21 @@
 #ifndef VEC_LIB_H
 #define VEC_LIB_H
+#include "../include/cstd-def/src/lib.h"
 
 #ifdef _cplusplus
 extern "C" {
-#endif
-#ifndef _cplusplus
-#include <stdbool.h>
 #endif
 
 #define MAX_CAPACITY 0x7fffffffUL
 #define DEFAULT_CAPACITY 16
 
-/**
- * The pointer-sized unsigned integer type.
- * 
- * The size of this primitive is how many bytes it takes to reference any location in memory.
- * For example, on a 32 bit target, this is 4 bytes and on a 64 bit target, this is 8 bytes.
- */
-typedef __SIZE_TYPE__ usize;
-
-/**
- * A function that frees the resources held by `self`.
- */
-typedef void (*Destructor)(void*);
-
-/**
- * A function that clones from `src` to `dest` without forgetting about the resources held by `self`.
- * 
- * * Params: `(void* dest,void* src)`.
- */
-typedef void (*Cloner)(void*,void*);
 
 /**
  * This virtual table keeping track of the resources held by the `Vec`.
  */
 typedef struct VecVTable {
   const Destructor destructor;
-  const Cloner cloner;
+  const Clone cloner;
 } VecVTable;
 
 /**

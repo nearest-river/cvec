@@ -1,6 +1,7 @@
 /bin
 /vec-rs
 /target
-/include
+
 
 Cargo.lock
+*.a
