@@ -3,4 +3,6 @@ name = "cvec"
 version = "0.1.0"
 edition = "2021"
 
+path = "rust-src/lib.rs"
+
 [dependencies]

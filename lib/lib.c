@@ -14,7 +14,7 @@ inline Vec vec_with_capacity(usize capacity,usize BYTES_PER_ELEMENT,VecVTable vt
     .len=0,
     .capacity=capacity,
     .vtable=vtable,
-    .ptr=__alloc(capacity*BYTES_PER_ELEMENT)
+    .ptr=__alloc(capacity*BYTES_PER_ELEMENT) // FIXME(nate): performance bug
   };
 
   return self;

@@ -14,8 +14,8 @@ bool _vec_grow_amortized(Vec* self,usize additional) {
   usize MIN_NON_ZERO_CAPACITY=MIN_NON_ZERO_CAP(self->BYTES_PER_ELEMENT);
 
   usize required_cap=self->len+additional;
-  usize cap0=max(self->capacity*2,required_cap);
-  usize cap=max(cap0,MIN_NON_ZERO_CAPACITY);
+  usize cap0=MAX(self->capacity*2,required_cap);
+  usize cap=MAX(cap0,MIN_NON_ZERO_CAPACITY);
 
   void* new_ptr=realloc(self->ptr,cap*self->BYTES_PER_ELEMENT);
   if(!new_ptr) return false;
